@@ -22,6 +22,9 @@ static void Main()
         Console.WriteLine("10. Показати лог");
         Console.WriteLine("11. Зберегти лог у файл");
         Console.WriteLine("12. Вихід");
+        Console.WriteLine("13. Зберегти систему в JSON");
+        Console.WriteLine("14. Завантажити систему з JSON");
+
 
         Console.Write("Ваш вибір: ");
         var choice = Console.ReadLine();
@@ -75,6 +78,15 @@ static void Main()
 
             case "12":
                 return;
+            case "13":
+                JsonStorage.Save(group, "system.json");
+                Console.WriteLine("Система збережена у system.json");
+                break;
+
+            case "14":
+                JsonStorage.Load(group, "system.json");
+                Console.WriteLine("Система завантажена з system.json");
+                break;
         }
     }
 }
