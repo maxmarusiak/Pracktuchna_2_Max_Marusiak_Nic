@@ -25,6 +25,7 @@ List<T> — динамічний. Масив — фіксований і шви�
 
 9. Посилання на GitHub репозиторій
 https://github.com/maxmarusiak/Pracktuchna_2_Max_Marusiak_Nic
-
+10. Скріншот git log --oneline --graph --all
+![git log](image2.png)
 11. Кількість створених гілок і комітів
 ![branches](src/img/image.png)
