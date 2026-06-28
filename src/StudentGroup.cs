@@ -5,6 +5,49 @@ public class StudentGroup
     public string GroupName { get; set; } = "";
     public string Speciality { get; set; } = "";
     public int Course { get; set; }
+    public List<Student> Students { get; } = new();
+    public PortMatrix Ports { get; } = new();
+    public PortLogger Logger { get; } = new();
+
+    public Student GetStudentByName(string name)
+    {
+        var student = Students.FirstOrDefault(s => s.Name == name);
+
+        if (student == null)
+            throw new ArgumentException($"Студента з ім'ям {name} не знайдено.");
+
+        return student;
+    }
+
+    public void AssignStudentToPort(Student student, int row, int col)
+    {
+        student.AssignedPort = (row, col);
+        Logger.LogOperation("ASSIGN", row * 16 + col, $"Студента {student.Name} призначено до порту [{row},{col}]");
+    }
+
+    public void WriteStudentData(Student student, byte[] data)
+    {
+        if (student.AssignedPort == null)
+            throw new InvalidOperationException("Студент не має призначеного порту.");
+
+        var (r, c) = student.AssignedPort.Value;
+
+        Ports.WriteToPort(r, c, data);
+        Logger.LogOperation("WRITE", r * 16 + c, $"Записано {data.Length} байт для студента {student.Name}");
+    }
+
+    public byte[] ReadStudentData(Student student)
+    {
+        if (student.AssignedPort == null)
+            throw new InvalidOperationException("Студент не має призначеного порту.");
+
+        var (r, c) = student.AssignedPort.Value;
+
+        var data = Ports.ReadFromPort(r, c);
+        Logger.LogOperation("READ", r * 16 + c, $"Прочитано дані для студента {student.Name}");
+
+        return data;
+    }
 
     public int GroupSize => _students.Count;
     public double AverageGroupGrade => _students.Count == 0
@@ -52,4 +95,21 @@ public class StudentGroup
     }
 
     public IEnumerable<Student> GetAllStudents() => _students;
+
+    public Student GetStudentByName(string name)
+    {
+        var student = Students.FirstOrDefault(s => s.Name == name);
+
+        if (student == null)
+            throw new ArgumentException($"Студента з ім'ям {name} не знайдено.");
+
+        return student;
+    }
+
+    public void SortByAverageGrade()
+    {
+        Students.Sort((a, b) => a.GetAverageLabGrade().CompareTo(b.GetAverageLabGrade()));
+    }
+
+
 }

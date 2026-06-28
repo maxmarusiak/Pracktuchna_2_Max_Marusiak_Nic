@@ -15,6 +15,8 @@ public class Student
     private double _averageGrade;
     private string _personalEmail;
     public byte[] LabGrades { get; } = new byte[10];
+    public (int Row, int Col)? AssignedPort { get; set; }
+
 
     // Required / init-only / read-only
     public required string FullName
@@ -104,6 +106,20 @@ public class Student
     public double GetAverageLabGrade()
     {
         return LabGrades.Average();
+    }
+    
+    public class Student : ICloneable
+    {
+        public object Clone()
+        {
+            return new Student
+            {
+                Name = this.Name,
+                Age = this.Age,
+                LabGrades = (byte[])this.LabGrades.Clone(),
+                AssignedPort = this.AssignedPort
+            };
+        }
     }
 
 
